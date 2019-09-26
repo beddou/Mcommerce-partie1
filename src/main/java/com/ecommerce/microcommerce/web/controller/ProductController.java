@@ -16,10 +16,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.List;
+import java.util.*;
 
 
-@Api( description="API pour es opérations CRUD sur les produits.")
+@Api( description="API pour les opérations CRUD sur les produits.")
 
 @RestController
 public class ProductController {
@@ -47,6 +47,19 @@ public class ProductController {
         return produitsFiltres;
     }
 
+
+    @ApiOperation(value = "Caclculer la marge de tous les produits")
+    @GetMapping(value = "/AdminProduits")
+
+    public Hashtable calculerMargeProduit () {
+
+        Iterable<Product> produits = productDao.findAll();
+        Hashtable ht = new Hashtable();
+        produits.forEach((produit)-> ht.put(produit.toString(),
+                produit.getPrix()-produit.getPrixAchat()));
+
+        return ht;
+    }
 
     //Récupérer un produit par son Id
     @ApiOperation(value = "Récupère un produit grâce à son ID à condition que celui-ci soit en stock!")
@@ -86,7 +99,7 @@ public class ProductController {
     @DeleteMapping (value = "/Produits/{id}")
     public void supprimerProduit(@PathVariable int id) {
 
-        productDao.delete(id);
+        productDao.deleteById(id);
     }
 
     @PutMapping (value = "/Produits")
