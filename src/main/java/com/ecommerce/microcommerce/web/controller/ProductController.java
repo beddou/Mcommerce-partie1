@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
@@ -60,6 +61,15 @@ public class ProductController {
 
         return ht;
     }
+
+    //Récupérer la liste des produits triée sur ordre alphabétique
+    @RequestMapping(value = "/ProduitsTries", method = RequestMethod.GET)
+    public List trierProduitsParOrdreAlphabetique(){
+        List<Product> produits = productDao.findAllByOrderByNomAsc() ;
+
+        return produits;
+    }
+
 
     //Récupérer un produit par son Id
     @ApiOperation(value = "Récupère un produit grâce à son ID à condition que celui-ci soit en stock!")
